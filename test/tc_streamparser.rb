@@ -101,9 +101,9 @@ class StreamParserTest < Test::Unit::TestCase
   end
 
   def test_entity_escaping3
-    parse_simple_helper( "<a href='htpp://google.com?p=1&amp;p=2'>text</a>" ) do |desired|
+    parse_simple_helper( "<a href='http://google.com?p=1&amp;p=2'>text</a>" ) do |desired|
       assert_equal "text", @listener.received.text
-      assert_equal "<a href='htpp://google.com?p=1&amp;p=2'>text</a>", @listener.received.to_s
+      assert_equal "<a href='http://google.com?p=1&amp;p=2'>text</a>", @listener.received.to_s
     end
   end
 
