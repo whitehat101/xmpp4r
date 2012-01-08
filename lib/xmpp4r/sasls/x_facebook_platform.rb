@@ -3,7 +3,7 @@
 # Website::http://home.gna.org/xmpp4r/
 
 require 'digest/md5'
-require 'xmpp4r/base64'
+require 'base64'
 require 'cgi'
 
 module Jabber
