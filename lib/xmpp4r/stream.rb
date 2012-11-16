@@ -68,11 +68,13 @@ module Jabber
       @stream_features = {}
 
       @fd = fd
-      @parser = StreamParser.new(@fd, self)
+      @parser = Nokogiri::XML::SAX::Parser.new(StreamParser.new(self))
+      
       @parser_thread = Thread.new do
         Thread.current.abort_on_exception = true
+        @parser.parse(@fd)
+        
         begin
-          @parser.parse
           Jabber::debuglog("DISCONNECTED\n")
 
           if @exception_block
