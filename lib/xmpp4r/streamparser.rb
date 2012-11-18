@@ -51,7 +51,7 @@ module Jabber
     end
     
     def characters(s)
-      @current.add(REXML::Text.new(s.to_s, @current.whitespace, nil, true)) if @current
+      @current.add(REXML::Text.new(s.to_s, @current.whitespace, nil, false)) if @current
     end
     
     def cdata_block(s)
