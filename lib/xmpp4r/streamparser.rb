@@ -19,14 +19,12 @@ module Jabber
     # listener:: [Object.receive(XMPPStanza)] The listener (usually a Jabber::Protocol::Connection instance)
     #
     def initialize(listener)
-      puts "Created"
       @listener = listener
       @current = nil
       @started = false
     end
     
     def start_element(name, attrs = [])
-      puts "Starting an element"
       e = REXML::Element.new(name)
       e.add_attributes attrs
       @current = @current.nil? ? e : @current.add_element(e)
