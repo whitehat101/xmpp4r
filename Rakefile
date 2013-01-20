@@ -1,5 +1,6 @@
 require 'rake'
-require "rake/clean"
+require 'rake/tasklib'
+require 'rake/clean'
 require 'rake/testtask'
 require 'rdoc/task'
 
@@ -157,6 +158,7 @@ begin
 
     s.add_dependency 'nokogiri'
     s.add_dependency 'rdoc', '>2.4.2'
+    s.add_dependency 'rake'
   end
 
   Gem::PackageTask.new(spec) do |pkg|
