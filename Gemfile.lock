@@ -1,0 +1,20 @@
+PATH
+  remote: .
+  specs:
+    xmpp4r (0.5)
+      nokogiri
+      rdoc (> 2.4.2)
+
+GEM
+  remote: http://rubygems.dev/
+  specs:
+    json (1.7.6)
+    nokogiri (1.5.6)
+    rdoc (3.12)
+      json (~> 1.4)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  xmpp4r!

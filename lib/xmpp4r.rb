@@ -113,4 +113,6 @@
 # Dumping your Jabber stream can be enabled this way:
 #   Jabber::debug = true
 
+require 'rubygems'
+require 'bundler/setup'
 require 'xmpp4r/xmpp4r'
