@@ -1,7 +1,7 @@
 require 'rake'
 require "rake/clean"
 require 'rake/testtask'
-require 'rake/rdoctask'
+require 'rdoc/task'
 
 $:.unshift 'lib'
 require "xmpp4r"
@@ -134,7 +134,7 @@ end
 CLEAN.include ["*.gem", "pkg", "rdoc", "coverage", "tools/*.png"]
 
 begin
-  require 'rake/gempackagetask'
+  require 'rubygems/package_task'
 
   spec = Gem::Specification.new do |s|
     s.name = PKG_NAME
@@ -154,9 +154,12 @@ begin
     s.extra_rdoc_files = RDOC_FILES
     s.rdoc_options = RDOC_OPTIONS
     s.required_ruby_version = ">= 1.8.4"
+
+    s.add_dependency 'nokogiri'
+    s.add_dependency 'rdoc', '>2.4.2'
   end
 
-  Rake::GemPackageTask.new(spec) do |pkg|
+  Gem::PackageTask.new(spec) do |pkg|
     pkg.gem_spec = spec
     pkg.need_tar = true
     pkg.need_zip = true
@@ -219,6 +222,7 @@ begin
   task :gem => ['gem:update_gemspec']
 
 rescue LoadError
+  raise
   puts <<EOF
 ###
   Packaging Warning : RubyGems is apparently not installed on this
