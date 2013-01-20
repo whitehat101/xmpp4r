@@ -68,11 +68,23 @@ module Jabber
       @stream_features = {}
 
       @fd = fd
-      @parser = StreamParser.new(@fd, self)
+      @doc = StreamParser.new(self)
+      @parser = Nokogiri::XML::SAX::PushParser.new(@doc)
+              
       @parser_thread = Thread.new do
         Thread.current.abort_on_exception = true
+        
         begin
-          @parser.parse
+          while !@fd.eof?
+            data = @fd.read_nonblock(500)
+            @parser << data
+          end
+        rescue IO::WaitReadable
+          IO.select([@fd])
+          retry
+        end
+        
+        begin
           Jabber::debuglog("DISCONNECTED\n")
 
           if @exception_block

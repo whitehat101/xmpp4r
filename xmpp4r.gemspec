@@ -238,5 +238,6 @@ Gem::Specification.new do |s|
   s.rubygems_version = "1.3.4"
   s.specification_version = 3
   s.summary = "XMPP4R is an XMPP/Jabber library for Ruby."
+  s.add_dependency('nokogiri')
   s.version = "0.5"
 end
