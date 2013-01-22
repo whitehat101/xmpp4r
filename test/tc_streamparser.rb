@@ -1,4 +1,9 @@
-#!/usr/bin/ruby
+#!/usr/bin/env ruby
+# encoding: utf-8
+
+##
+# The StreamParser class was completely rewritten. These tests need to be re-written
+##
 
 $:.unshift File.join(File.dirname(__FILE__), '..', 'lib')
 
