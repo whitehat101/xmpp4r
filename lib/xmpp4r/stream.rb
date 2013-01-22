@@ -75,16 +75,11 @@ module Jabber
         Thread.current.abort_on_exception = true
         
         begin
-          while !@fd.eof?
-            data = @fd.read_nonblock(500)
-            @parser << data
-          end
-        rescue IO::WaitReadable
-          IO.select([@fd])
-          retry
+          until @fd.eof?
+            @parser << @fd.read_nonblock(500)
         end
+          @parser.finish
         
-        begin
           Jabber::debuglog("DISCONNECTED\n")
 
           if @exception_block
