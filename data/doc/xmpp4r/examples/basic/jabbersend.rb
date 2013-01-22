@@ -1,4 +1,4 @@
-#!/usr/bin/ruby
+#!/usr/bin/env ruby
 
 # This script will send a jabber message to the specified JID. The subject can be
 # specified using the '-s' option, and the message will be taken from stdin.
