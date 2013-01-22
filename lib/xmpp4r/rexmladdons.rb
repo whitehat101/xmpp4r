@@ -74,7 +74,7 @@ module REXML
     def first_element_text(e, namespace = nil)
       el = first_element(e, namespace)
       if el
-        return el.text
+        return el.texts.map {|t|t.value}.join
       else
         return nil
       end
