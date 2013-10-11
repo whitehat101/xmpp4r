@@ -1,4 +1,4 @@
-#!/usr/bin/ruby
+#!/usr/bin/env ruby
 #
 # XMPP4R - XMPP Library for Ruby
 # Copyright (C) 2005 Stephan Maka <stephan@spaceboyz.net>

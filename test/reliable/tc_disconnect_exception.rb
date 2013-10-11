@@ -1,4 +1,4 @@
-#!/usr/bin/ruby
+#!/usr/bin/env ruby
 
 $:.unshift "#{File.dirname(__FILE__)}/../../lib"
 
@@ -10,12 +10,12 @@ class DisconnectExceptionTest < Test::Unit::TestCase
     def receive(element)
     end
   end
-  
+
   def test_streamparser
     rd, wr = IO.pipe
     listener = Listener.new
     exception_raised = nil
-    
+
     Thread.new do
       begin
         parser = Jabber::StreamParser.new(rd, listener)
@@ -24,14 +24,14 @@ class DisconnectExceptionTest < Test::Unit::TestCase
         exception_raised = e
       end
     end
-    
+
     wr.write("<hi/>")
     wr.close
     sleep(0.1)
-    
+
     assert exception_raised
     assert exception_raised.is_a?(Jabber::ServerDisconnected), "Expected a Jabber::ServerDisconnected but got #{exception_raised}"
     # puts exception_raised.inspect
   end
-  
+
 end

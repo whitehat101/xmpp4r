@@ -1,4 +1,4 @@
-#!/usr/bin/ruby
+#!/usr/bin/env ruby
 
 $:.unshift File.join(File.dirname(__FILE__), '..', 'lib')
 
@@ -33,12 +33,12 @@ class StreamParserTest < Test::Unit::TestCase
 
   def parse_simple_helper(fixture)
     parser = StreamParser.new(STREAM + fixture, @listener)
-    
+
     begin
       parser.parse
     rescue Jabber::ServerDisconnected => e
     end
-    
+
     yield parse_with_rexml(fixture)
   end
 
@@ -119,7 +119,7 @@ class StreamParserTest < Test::Unit::TestCase
       parser.parse
     rescue Jabber::ServerDisconnected => e
     end
-    
+
     assert_equal 'foobar', @listener.received.attributes['to']
   end
 end

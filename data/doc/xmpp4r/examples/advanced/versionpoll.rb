@@ -1,4 +1,4 @@
-#!/usr/bin/ruby
+#!/usr/bin/env ruby
 
 # This script will request the version information of a list of JID given
 # on stdin.

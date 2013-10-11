@@ -1,4 +1,4 @@
-#!/usr/bin/ruby
+#!/usr/bin/env ruby
 
 $:.unshift File::dirname(__FILE__) + '/../lib'
 
@@ -134,6 +134,32 @@ class REXMLTest < Test::Unit::TestCase
     e2.attributes['a:bar'] = 'bar'
 
     assert_not_equal(e1, e2)
+  end
+
+  # in development
+  # experienced errors when the server sent strings with [&, <, >] in them
+  # it terminated the string prepaturely (isis chatbot)
+  # of corse, it seems to work correctly here.
+  # in production, it did error:
+  # - "a>b<c" => 'a'
+  # - "a<b>c" => 'a'
+  # - "a&b"   => 'a'
+  # maybe it is deeper in the SimpleMUCClient..?
+  def test_escaped_character_premature_end
+    e = REXML::Element.new('body')
+    e.text = 'a&gt;b&lt;c'
+    assert_equal("<body>a&amp;gt;b&amp;lt;c</body>", e.to_s )
+    assert_equal("a>b<c", e.text )
+
+    # e.text = 'a<b>c'
+    # assert_equal("<body>a&lt;b&gt;c</body>", e.to_s )
+    # assert_equal("a<b>c", e.text )
+
+    # d = REXML::Document.new "<body>a&amp;gt;b&amp;lt;c</body>"
+    d = REXML::Document.new e.to_s
+    assert_equal("a&gt;b&lt;c", d.root.text )
+    assert_equal("a&gt;b&lt;c", d.first_element_text('body') ) # really?
+    # assert_equal("a>b<c", d.first_element_text('body') )
   end
 
 end

@@ -1,4 +1,4 @@
-#!/usr/bin/ruby
+#!/usr/bin/env ruby
 
 $:.unshift '../lib'
 
@@ -70,13 +70,13 @@ class MessageTest < Test::Unit::TestCase
 
     x.set_body("check this link <domain.com> out")
     assert_equal("check this link <domain.com> out", x.body)
-    
+
     x.set_xhtml_body("<span style='font-weight: bold'>check <i>this</i> <a href='domain.com'>link</a> out</span>")
     assert_equal("<span style='font-weight: bold'>check <i>this</i> <a href='domain.com'>link</a> out</span>", x.xhtml_body)
-    
+
     x.first_element("html").remove
     assert_equal(nil, x.xhtml_body)
-    
+
     # Some clients send markupped body without <html/> wrapper,
     # and we need to be able to deal with this also
     el = REXML::Element.new("body")
@@ -85,28 +85,28 @@ class MessageTest < Test::Unit::TestCase
     x.add_element(el)
     assert_equal("xhtml body without wrapper", x.xhtml_body)
   end
-  
+
   def test_should_get_xhtml_body_of_new_message
     x = Message.new()
-    
+
     x.set_xhtml_body("check <i>this</i> <a href='domain.com'>link</a> out")
     assert_equal("check <i>this</i> <a href='domain.com'>link</a> out", x.xhtml_body)
-    
+
     doc = REXML::Document.new x.to_s
     x2 = Message.new.import doc.root
-    
+
     assert_equal(x.to_s, x2.to_s)
     assert_equal("check <i>this</i> <a href='domain.com'>link</a> out", x2.xhtml_body)
   end
-  
+
   def test_should_raise_exception_with_invalid_xhtml_body
     x = Message.new()
-    
-    assert_raise Jabber::ArgumentError do 
+
+    assert_raise Jabber::ArgumentError do
       x.set_xhtml_body("check <i>this <a href='domain.com'>link</a> out")
     end
   end
-  
+
   def test_subject
     x = Message.new
     assert_equal(nil, x.subject)

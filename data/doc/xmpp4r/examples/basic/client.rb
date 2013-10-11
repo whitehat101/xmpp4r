@@ -1,4 +1,4 @@
-#!/usr/bin/ruby
+#!/usr/bin/env ruby
 
 # Basic console client that does nothing, but easy to modify to test things.
 # to test, start, then type :

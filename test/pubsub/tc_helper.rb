@@ -1,4 +1,4 @@
-#!/usr/bin/ruby
+#!/usr/bin/env ruby
 
 $:.unshift File::dirname(__FILE__) + '/../../lib'
 
@@ -706,7 +706,7 @@ class PubSub::ServiceHelperTest < Test::Unit::TestCase
     node = 'princely_musings'
     pubsub = 'pubsub.shakespeare.lit'
     h = PubSub::ServiceHelper.new(@client,pubsub)
-    
+
     state { |iq|
       assert_kind_of(Jabber::Iq,iq)
       assert_equal(:set, iq.type)

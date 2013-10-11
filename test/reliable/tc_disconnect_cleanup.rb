@@ -1,4 +1,4 @@
-#!/usr/bin/ruby
+#!/usr/bin/env ruby
 
 $:.unshift "#{File.dirname(__FILE__)}/../../lib"
 
@@ -40,7 +40,7 @@ class ClientDisconnectCleanupTest < Test::Unit::TestCase
     client.on_exception do |e, connection, where_failed|
       @exceptions_caught += 1
     end
-    
+
     Thread.new do
       client.socket_override = rd
       client.instance_eval{ @keepalive_interval = 0.1 }
@@ -49,11 +49,11 @@ class ClientDisconnectCleanupTest < Test::Unit::TestCase
     end
     sleep(0.1)
     assert client.is_connected?
-    
+
     wr.write('<stream:stream xmlns:stream="http://etherx.jabber.org/streams">')
     wr.write("</stream:stream>")
     sleep(0.2)
-    
+
     assert !client.is_connected?
     assert client.instance_eval{ @parser_thread.nil? || !@parser_thread.alive? }
     assert client.instance_eval{ @keepaliveThread.nil? || !@keepaliveThread.alive? }
@@ -73,7 +73,7 @@ class ClientDisconnectCleanupTest < Test::Unit::TestCase
     client.on_exception do |e, connection, where_failed|
       @exceptions_caught += 1
     end
-    
+
     Thread.new do
       client.socket_override = rd
       client.connect
@@ -89,10 +89,10 @@ class ClientDisconnectCleanupTest < Test::Unit::TestCase
     end
     wr.write(%Q{<stream:stream from='localhost' id="acecf234be084aecdc16509077573c7d7200912f" version='1.0'  xmlns:stream="http://etherx.jabber.org/streams" xmlns="jabber:client"><stream:features><auth xmlns='http://jabber.org/features/iq-auth'/></stream:features> })
     sleep(0.1)
-    
+
     assert !client.is_connected?
     assert client.instance_eval{ @parser_thread.nil? || !@parser_thread.alive? }
-    assert client.instance_eval{ @keepaliveThread.nil? || !@keepaliveThread.alive? }   
+    assert client.instance_eval{ @keepaliveThread.nil? || !@keepaliveThread.alive? }
     assert @exceptions_caught > 0
   end
 
@@ -109,7 +109,7 @@ class ClientDisconnectCleanupTest < Test::Unit::TestCase
     client.on_exception do |e, connection, where_failed|
       @exceptions_caught += 1
     end
-    
+
     Thread.new do
       client.socket_override = rd
       client.connect
@@ -123,10 +123,10 @@ class ClientDisconnectCleanupTest < Test::Unit::TestCase
 
     wr.close
     sleep(0.1)
-    
+
     assert !client.is_connected?
     assert client.instance_eval{ @parser_thread.nil? || !@parser_thread.alive? }
-    assert client.instance_eval{ @keepaliveThread.nil? || !@keepaliveThread.alive? }   
+    assert client.instance_eval{ @keepaliveThread.nil? || !@keepaliveThread.alive? }
     assert @exceptions_caught > 0
   end
 
@@ -153,7 +153,7 @@ class ConnectionDisconnectCleanupTest < Test::Unit::TestCase
       super
     end
   end
-  
+
   def test_cleanup_when_disconnected_during_keepalive
     rd, wr = IO.pipe
     conn = PipeConnection.new
@@ -161,23 +161,23 @@ class ConnectionDisconnectCleanupTest < Test::Unit::TestCase
     conn.on_exception do |e, connection, where_failed|
       @exceptions_caught += 1
     end
-    
+
     Thread.new do
       conn.socket_override = rd
       #this will raise exception in keepalive thread, when attempts to send blank space shortly after connect
       conn.instance_eval{ @keepalive_interval = 0.1 }
       conn.connect
     end
-    
+
     sleep(0.2)
-    
+
     assert rd.closed?
     assert !conn.is_connected?
     assert !conn.instance_eval{ @parser_thread }.alive?
     assert !conn.instance_eval{ @keepaliveThread }.alive?
     assert @exceptions_caught > 0
   end
-  
+
   def test_cleanup_after_stream_close
     rd, wr = IO.pipe
     conn = PipeConnection.new
@@ -185,61 +185,61 @@ class ConnectionDisconnectCleanupTest < Test::Unit::TestCase
     conn.on_exception do |e, connection, where_failed|
       @exceptions_caught += 1
     end
-    
+
     Thread.new do
       conn.socket_override = rd
       conn.connect
     end
-    
-    wr.write("<hi/>")    
+
+    wr.write("<hi/>")
     wr.close
     sleep(0.1)
-    
+
     assert rd.closed?
     assert !conn.is_connected?
     assert !conn.instance_eval{ @parser_thread }.alive?
     assert !conn.instance_eval{ @keepaliveThread }.alive?
     assert @exceptions_caught > 0
   end
-  
+
   def test_cleanup_after_stream_end
-    rd, wr = IO.pipe    
+    rd, wr = IO.pipe
     conn = PipeConnection.new
     @exceptions_caught = 0
     conn.on_exception do |e, connection, where_failed|
       @exceptions_caught += 1
     end
-    
+
     Thread.new do
       conn.socket_override = rd
       conn.connect
     end
-    
+
     wr.write('<stream:stream xmlns:stream="http://etherx.jabber.org/streams">')
     wr.write("</stream:stream>")
     # wr.close
     sleep(0.1)
-    
+
     assert rd.closed?
     assert !conn.is_connected?
     assert !conn.instance_eval{ @parser_thread }.alive?
     assert !conn.instance_eval{ @keepaliveThread }.alive?
     assert @exceptions_caught > 0
   end
-  
+
 end
 
 class StreamDisconnectCleanupTest < Test::Unit::TestCase
-  
+
   def test_cleanup_when_errors_on_send
     rd, wr = IO.pipe
-    
+
     stream = Jabber::Stream.new
     @exceptions_caught = 0
     stream.on_exception do |e, connection, where_failed|
       @exceptions_caught += 1
     end
-    
+
     assert !stream.is_connected?
 
     stream.start(rd)
@@ -251,16 +251,16 @@ class StreamDisconnectCleanupTest < Test::Unit::TestCase
     rescue
     end
     sleep(0.1)
-    
+
     assert rd.closed?
     assert !stream.is_connected?
     assert !stream.instance_eval{ @parser_thread }.alive?
     assert @exceptions_caught > 0
   end
-  
+
   def test_cleanup_after_stream_close
     rd, wr = IO.pipe
-    
+
     stream = Jabber::Stream.new
     @exceptions_caught = 0
     stream.on_exception do |e, connection, where_failed|
@@ -275,7 +275,7 @@ class StreamDisconnectCleanupTest < Test::Unit::TestCase
 
     wr.close
     sleep(0.1)
-    
+
     assert rd.closed?
     assert !stream.is_connected?
     assert !stream.instance_eval{ @parser_thread }.alive?
@@ -284,13 +284,13 @@ class StreamDisconnectCleanupTest < Test::Unit::TestCase
 
   def test_cleanup_after_stream_end
     rd, wr = IO.pipe
-    
+
     stream = Jabber::Stream.new
     @exceptions_caught = 0
     stream.on_exception do |e, connection, where_failed|
       @exceptions_caught += 1
     end
-    
+
     assert !stream.is_connected?
 
     stream.start(rd)
@@ -300,7 +300,7 @@ class StreamDisconnectCleanupTest < Test::Unit::TestCase
 
     # wr.close
     sleep(0.1)
-    
+
     assert rd.closed?
     assert !stream.is_connected?
     assert !stream.instance_eval{ @parser_thread }.alive?
@@ -309,13 +309,13 @@ class StreamDisconnectCleanupTest < Test::Unit::TestCase
 
   def test_cleanup_after_parse_failure
     rd, wr = IO.pipe
-    
+
     stream = Jabber::Stream.new
     @exceptions_caught = 0
     stream.on_exception do |e, connection, where_failed|
       @exceptions_caught += 1
     end
-    
+
     assert !stream.is_connected?
 
     stream.start(rd)
@@ -324,11 +324,11 @@ class StreamDisconnectCleanupTest < Test::Unit::TestCase
     assert stream.is_connected?
 
     sleep(0.1)
-    
+
     assert rd.closed?
     assert !stream.is_connected?
     assert !stream.instance_eval{ @parser_thread }.alive?
     assert @exceptions_caught > 0
   end
-  
+
 end
