@@ -507,21 +507,21 @@ class MUCClientTest < Test::Unit::TestCase
     }
     state { |stanza|
       assert_kind_of(Message, stanza)
-      assert(:groupchat, stanza.type)
+      assert_equal(:groupchat, stanza.type)
       assert_equal(JID.new('hag66@shakespeare.lit/pda'), stanza.from)
       assert_equal(JID.new('darkcave@macbeth.shakespeare.lit'), stanza.to)
       assert_equal('First message', stanza.body)
     }
     state { |stanza|
       assert_kind_of(Message, stanza)
-      assert(:chat, stanza.type)
+      assert_equal(:chat, stanza.type)
       assert_equal(JID.new('hag66@shakespeare.lit/pda'), stanza.from)
       assert_equal(JID.new('darkcave@macbeth.shakespeare.lit/secondwitch'), stanza.to)
       assert_equal('Second message', stanza.body)
     }
     state { |stanza|
       assert_kind_of(Message, stanza)
-      assert(:chat, stanza.type)
+      assert_equal(:chat, stanza.type)
       assert_equal(JID.new('hag66@shakespeare.lit/pda'), stanza.from)
       assert_equal(JID.new('darkcave@macbeth.shakespeare.lit/firstwitch'), stanza.to)
       assert_equal('Third message', stanza.body)
