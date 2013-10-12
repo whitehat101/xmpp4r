@@ -5,6 +5,7 @@
 require 'resolv'
 require 'xmpp4r/connection'
 require 'xmpp4r/sasl'
+require 'xmpp4r/sasls/x_facebook_platform'
 
 module Jabber
 
